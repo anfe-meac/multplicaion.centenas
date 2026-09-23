@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multiplicamos por cientos</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Trebuchet MS", Arial, sans-serif;
+        background:
+            radial-gradient(circle at 10% 10%, #e7f7ff 0, transparent 30%),
+            radial-gradient(circle at 90% 20%, #fff0d9 0, transparent 30%),
+            linear-gradient(135deg, #f7fbff, #eef5ff);
+        color: #26354a;
+        min-height: 100vh;
+    }
+
+    .app {
+        width: min(1100px, 94%);
+        margin: 25px auto 40px;
+    }
+
+    header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 3.4rem);
+        color: #183b67;
+    }
+
+    header p {
+        font-size: 1.15rem;
+        color: #52657c;
+        margin: 8px 0;
+    }
+
+    .top-panel {
+        background: white;
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(39, 75, 112, .12);
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: end;
+        margin-bottom: 20px;
+    }
+
+    .control {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #40566f;
+    }
+
+    input, select {
+        font-size: 1.15rem;
+        padding: 11px 14px;
+        border: 2px solid #cbd9e8;
+        border-radius: 12px;
+        min-width: 150px;
+        outline: none;
+        background: white;
+    }
+
+    input:focus, select:focus {
+        border-color: #3487d8;
+    }
+
+    button {
+        border: none;
+        border-radius: 13px;
+        padding: 12px 19px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        min-height: 46px;
+        transition: transform .15s, box-shadow .15s;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(30,70,110,.18);
+    }
+
+    .primary {
+        background: #347fd1;
+        color: white;
+    }
+
+    .secondary {
+        background: #e7f1fb;
+        color: #245784;
+    }
+
+    .orange {
+        background: #ffb64d;
+        color: #543400;
+    }
+
+    .green {
+        background: #5fc995;
+        color: #073d29;
+    }
+
+    .progress-area {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(39,75,112,.09);
+        margin-bottom: 20px;
+    }
+
+    .progress-label {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .progress {
+        height: 13px;
+        background: #e4edf6;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        width: 20%;
+        background: linear-gradient(90deg, #4a9be8, #55c7a0);
+        border-radius: 20px;
+        transition: width .5s ease;
+    }
+
+    .main-card {
+        background: white;
+        border-radius: 28px;
+        padding: clamp(20px, 4vw, 40px);
+        box-shadow: 0 14px 40px rgba(39,75,112,.13);
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .step-title {
+        color: #265783;
+        font-size: 1.6rem;
+        margin: 0 0 10px;
+    }
+
+    .step-description {
+        font-size: 1.1rem;
+        color: #5a6e84;
+        min-height: 30px;
+    }
+
+    .equation {
+        margin: 25px auto;
+        font-size: clamp(2.3rem, 8vw, 5rem);
+        font-weight: 900;
+        color: #193b63;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .number {
+        display: inline-block;
+        transition: all .5s ease;
+    }
+
+    .blue {
+        color: #2784d8;
+    }
+
+    .orange-text {
+        color: #ed951d;
+    }
+
+    .green-text {
+        color: #29a36a;
+    }
+
+    .purple {
+        color: #8b62c9;
+    }
+
+    .operator {
+        color: #66788c;
+    }
+
+    .highlight {
+        animation: pop .65s ease;
+    }
+
+    @keyframes pop {
+        0% { transform: scale(.7); opacity: .2; }
+        60% { transform: scale(1.2); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .visual-box {
+        margin: 25px auto;
+        max-width: 850px;
+        min-height: 210px;
+        background: #f2f8fd;
+        border-radius: 22px;
+        padding: 22px;
+        border: 2px solid #dceaf5;
+    }
+
+    .cards {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .value-card {
+        background: white;
+        border-radius: 18px;
+        padding: 18px 25px;
+        min-width: 130px;
+        box-shadow: 0 5px 15px rgba(35,76,110,.12);
+        font-size: 1.4rem;
+        font-weight: bold;
+        position: relative;
+    }
+
+    .value-card small {
+        display: block;
+        font-size: .82rem;
+        color: #72849a;
+        margin-top: 5px;
+        font-weight: normal;
+    }
+
+    .arrow {
+        font-size: 2.5rem;
+        color: #5c92c3;
+        animation: arrowMove 1.2s infinite alternate;
+    }
+
+    @keyframes arrowMove {
+        from { transform: translateX(-4px); }
+        to { transform: translateX(4px); }
+    }
+
+    .base-ten {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+    }
+
+    .block {
+        width: 34px;
+        height: 34px;
+        background: #5bb8e8;
+        border: 2px solid #2589bb;
+        border-radius: 5px;
+        box-shadow: 2px 3px 0 #237ca8;
+        animation: blockIn .4s ease both;
+    }
+
+    @keyframes blockIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(.7);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .hundred {
+        width: 70px;
+        height: 70px;
+        background:
+            linear-gradient(90deg,
+            transparent 31%, rgba(255,255,255,.7) 32%, transparent 34%,
+            transparent 65%, rgba(255,255,255,.7) 66%, transparent 68%),
+            linear-gradient(
+            transparent 31%, rgba(255,255,255,.7) 32%, transparent 34%,
+            transparent 65%, rgba(255,255,255,.7) 66%, transparent 68%),
+            #62bde7;
+        border: 3px solid #2688b9;
+        border-radius: 8px;
+        box-shadow: 3px 4px 0 #267da5;
+    }
+
+    .zeros {
+        display: inline-flex;
+        gap: 4px;
+    }
+
+    .zero {
+        display: inline-block;
+        padding: 5px 9px;
+        background: #dceeff;
+        color: #2571ae;
+        border-radius: 9px;
+        animation: zeroIn .5s ease both;
+    }
+
+    @keyframes zeroIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .explanation {
+        max-width: 780px;
+        margin: 20px auto;
+        padding: 17px 20px;
+        border-radius: 16px;
+        background: #fff7df;
+        border-left: 7px solid #ffbd4a;
+        text-align: left;
+        font-size: 1.05rem;
+        line-height: 1.55;
+    }
+
+    .property {
+        display: inline-block;
+        padding: 7px 13px;
+        background: #eee7ff;
+        color: #694ba0;
+        border-radius: 20px;
+        font-weight: bold;
+        margin: 8px;
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+
+    .challenge {
+        margin-top: 22px;
+        background: #eaf9f2;
+        border: 2px solid #bfe9d2;
+        border-radius: 20px;
+        padding: 20px;
+    }
+
+    .challenge h3 {
+        margin-top: 0;
+        color: #16734d;
+    }
+
+    .answer-area {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+    }
+
+    .answer-area input {
+        max-width: 200px;
+    }
+
+    .feedback {
+        min-height: 30px;
+        margin-top: 12px;
+        font-weight: bold;
+    }
+
+    .correct {
+        color: #14804f;
+    }
+
+    .incorrect {
+        color: #c45c22;
+    }
+
+    .teacher-note {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 16px;
+        background: #f4f6f9;
+        color: #5c6c7e;
+        text-align: left;
+        font-size: .94rem;
+    }
+
+    @media (max-width: 600px) {
+        .app {
+            width: 96%;
+        }
+
+        .main-card {
+            padding: 18px 12px;
+        }
+
+        .equation {
+            gap: 7px;
+        }
+
+        .value-card {
+            min-width: 100px;
+            padding: 14px;
+        }
+
+        .arrow {
+            font-size: 1.8rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header>
+        <h1>🚀 Multiplicamos por cientos</h1>
+        <p>Descubrimos una forma sencilla de resolver multiplicaciones como <strong>32 × 300</strong></p>
+    </header>
+
+    <section class="top-panel">
+
+        <div class="control">
+            <label for="factorA">Primer factor</label>
+            <input id="factorA" type="number" value="32" min="1" max="999">
+        </div>
+
+        <div class="control">
+            <label for="factorB">Segundo factor</label>
+            <select id="factorB">
+                <option value="100">100</option>
+                <option value="200">200</option>
+                <option value="300" selected>300</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+                <option value="600">600</option>
+                <option value="700">700</option>
+                <option value="800">800</option>
+                <option value="900">900</option>
+            </select>
+        </div>
+
+        <button class="primary" id="startBtn" type="button">
+            ▶ Comenzar
+        </button>
+
+        <button class="secondary" id="exampleBtn" type="button">
+            🔄 Otro ejemplo
+        </button>
+
+    </section>
+
+    <section class="progress-area">
+        <div class="progress-label">
+            <span id="progressText">Paso 1 de 5</span>
+            <span id="progressPercent">20%</span>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+    </section>
+
+    <main class="main-card">
+
+        <h2 class="step-title" id="stepTitle">
+            Paso 1: Observamos la multiplicación
+        </h2>
+
+        <p class="step-description" id="stepDescription">
+            Primero observamos los factores y pensamos cómo podemos transformar la multiplicación.
+        </p>
+
+        <div class="equation" id="equation"></div>
+
+        <div class="visual-box" id="visualBox"></div>
+
+        <div class="explanation" id="explanation"></div>
+
+        <div class="controls">
+            <button class="secondary" id="prevBtn" type="button">
+                ◀ Anterior
+            </button>
+
+            <button class="primary" id="nextBtn" type="button">
+                Siguiente ▶
+            </button>
+
+            <button class="green" id="animateBtn" type="button">
+                ✨ Animar paso
+            </button>
+        </div>
+
+        <section class="challenge">
+
+            <h3>🎯 Ahora inténtalo tú</h3>
+
+            <div id="challengeQuestion">
+                ¿Cuánto es 32 × 300?
+            </div>
+
+            <div class="answer-area">
+                <input
+                    id="answer"
+                    type="number"
+                    placeholder="Escribe tu respuesta"
+                    aria-label="Respuesta"
+                >
+
+                <button class="green" id="checkBtn" type="button">
+                    Comprobar
+                </button>
+            </div>
+
+            <div class="feedback" id="feedback" aria-live="polite"></div>
+
+        </section>
+
+        <div class="teacher-note">
+            💡 <strong>Idea para modelar:</strong>
+            primero se puede preguntar:
+            <em>“¿Qué podemos hacer con el 300 para que la multiplicación sea más fácil?”</em>
+            Después se muestra que <strong>300 = 3 × 100</strong> y se observa cómo
+            <strong>32 × 3 = 96</strong> y luego se incorpora el ×100.
+        </div>
+
+    </main>
+</div>
+
+
+<script>
+(() => {
+
+    const factorAInput = document.getElementById("factorA");
+    const factorBSelect = document.getElementById("factorB");
+
+    const startBtn = document.getElementById("startBtn");
+    const exampleBtn = document.getElementById("exampleBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const animateBtn = document.getElementById("animateBtn");
+
+    const equation = document.getElementById("equation");
+    const visualBox = document.getElementById("visualBox");
+    const explanation = document.getElementById("explanation");
+
+    const stepTitle = document.getElementById("stepTitle");
+    const stepDescription = document.getElementById("stepDescription");
+
+    const progressText = document.getElementById("progressText");
+    const progressPercent = document.getElementById("progressPercent");
+    const progressBar = document.getElementById("progressBar");
+
+    const challengeQuestion = document.getElementById("challengeQuestion");
+    const answer = document.getElementById("answer");
+    const checkBtn = document.getElementById("checkBtn");
+    const feedback = document.getElementById("feedback");
+
+    let A = 32;
+    let B = 300;
+    let step = 1;
+
+    const totalSteps = 5;
+
+
+    function cleanNumber(value) {
+        const n = Number(value);
+
+        if (!Number.isFinite(n)) return 1;
+
+        return Math.max(1, Math.min(999, Math.round(n)));
+    }
+
+
+    function getBData() {
+        const hundreds = B / 100;
+
+        return {
+            hundreds,
+            result: A * B,
+            simple: A * hundreds
+        };
+    }
+
+
+    function setExample() {
+
+        const examples = [
+            [32, 300],
+            [40, 200],
+            [24, 400],
+            [15, 300],
+            [25, 200],
+            [36, 500],
+            [42, 200]
+        ];
+
+        const current = `${A}-${B}`;
+
+        let choice = examples[Math.floor(Math.random() * examples.length)];
+
+        while (`${choice[0]}-${choice[1]}` === current) {
+            choice = examples[Math.floor(Math.random() * examples.length)];
+        }
+
+        A = choice[0];
+        B = choice[1];
+
+        factorAInput.value = A;
+        factorBSelect.value = B;
+
+        step = 1;
+
+        update();
+    }
+
+
+    function readInputs() {
+
+        A = cleanNumber(factorAInput.value);
+        B = Number(factorBSelect.value);
+
+        if (![100,200,300,400,500,600,700,800,900].includes(B)) {
+            B = 100;
+            factorBSelect.value = 100;
+        }
+
+        factorAInput.value = A;
+
+        step = 1;
+
+        feedback.textContent = "";
+
+        update();
+    }
+
+
+    function updateProgress() {
+
+        const percent = Math.round((step / totalSteps) * 100);
+
+        progressText.textContent =
+            `Paso ${step} de ${totalSteps}`;
+
+        progressPercent.textContent =
+            `${percent}%`;
+
+        progressBar.style.width = `${percent}%`;
+    }
+
+
+    function update() {
+
+        updateProgress();
+
+        const data = getBData();
+
+        challengeQuestion.innerHTML =
+            `¿Cuánto es <strong>${A} × ${B}</strong>?`;
+
+        if (step === 1) {
+
+            stepTitle.textContent =
+                "Paso 1: Observamos la multiplicación";
+
+            stepDescription.textContent =
+                "Tenemos una multiplicación con un número que termina en dos ceros.";
+
+            equation.innerHTML = `
+                <span class="number blue">${A}</span>
+                <span class="operator">×</span>
+                <span class="number orange-text">${B}</span>
+            `;
+
+            visualBox.innerHTML = `
+                <div class="cards">
+                    <div class="value-card">
+                        <span class="blue">${A}</span>
+                        <small>primer factor</small>
+                    </div>
+
+                    <div class="operator">×</div>
+
+                    <div class="value-card">
+                        <span class="orange-text">${B}</span>
+                        <small>segundo factor</small>
+                    </div>
+                </div>
+            `;
+
+            explanation.innerHTML = `
+                🔎 Observemos el segundo factor:
+                <strong>${B}</strong> tiene dos ceros.
+                Podemos descomponerlo para hacer la multiplicación más sencilla.
+            `;
+
+        }
+
+        else if (step === 2) {
+
+            stepTitle.textContent =
+                "Paso 2: Descomponemos el número";
+
+            stepDescription.textContent =
+                `Transformamos ${B} en ${data.hundreds} × 100.`;
+
+            equation.innerHTML = `
+                <span class="number blue">${A}</span>
+                <span class="operator">×</span>
+                <span class="number orange-text">${B}</span>
+                <span class="operator">=</span>
+                <span class="number orange-text">${data.hundreds}</span>
+                <span class="operator">×</span>
+                <span class="number purple">100</span>
+            `;
+
+            visualBox.innerHTML = `
+                <div class="cards">
+
+                    <div class="value-card">
+                        <span class="orange-text">${B}</span>
+                    </div>
+
+                    <div class="arrow">➡️</div>
+
+                    <div class="value-card">
+                        <span class="orange-text">${data.hundreds}</span>
+                        <small>grupos de 100</small>
+                    </div>
+
+                    <div class="operator">×</div>
+
+                    <div class="value-card">
+                        <span class="purple">100</span>
+                    </div>
+
+                </div>
+            `;
+
+            explanation.innerHTML = `
+                🧩 <strong>${B} = ${data.hundreds} × 100</strong>.
+                Ahora podemos sustituir ${B} por esa descomposición:
+                <br><br>
+                <strong>${A} × ${B}</strong>
+                =
+                <strong>${A} × ${data.hundreds} × 100</strong>
+            `;
+
+        }
+
+        else if (step === 3) {
+
+            stepTitle.textContent =
+                "Paso 3: Aplicamos la propiedad asociativa";
+
+            stepDescription.textContent =
+                "Agrupamos primero los números que hacen más fácil la multiplicación.";
+
+            equation.innerHTML = `
+                <span class="number blue">${A}</span>
+                <span class="operator">×</span>
+                <span class="number orange-text">${data.hundreds}</span>
+                <span class="operator">×</span>
+                <span class="number purple">100</span>
+            `;
+
+            visualBox.innerHTML = `
+                <div class="property">
+                    Propiedad asociativa
+                </div>
+
+                <div style="font-size:clamp(1.7rem,5vw,3rem); margin-top:20px;">
+                    (<strong class="blue">${A}</strong>
+                    ×
+                    <strong class="orange-text">${data.hundreds}</strong>)
+                    ×
+                    <strong class="purple">100</strong>
+                </div>
+
+                <div style="font-size:1.1rem; margin-top:18px; color:#65788d;">
+                    Primero multiplicamos los factores pequeños.
+                </div>
+            `;
+
+            explanation.innerHTML = `
+                🧠 La propiedad asociativa nos permite cambiar
+                <strong>la forma de agrupar</strong> los factores sin cambiar
+                el resultado.
+                <br><br>
+                Así podemos calcular primero:
+                <strong>${A} × ${data.hundreds}</strong>.
+            `;
+
+        }
+
+        else if (step === 4) {
+
+            stepTitle.textContent =
+                "Paso 4: Multiplicamos y agregamos los ceros";
+
+            stepDescription.textContent =
+                `${A} × ${data.hundreds} = ${data.simple}. Luego multiplicamos por 100.`;
+
+            equation.innerHTML = `
+                <span class="number blue">${A}</span>
+                <span class="operator">×</span>
+                <span class="number orange-text">${data.hundreds}</span>
+                <span class="operator">=</span>
+                <span class="number green-text">${data.simple}</span>
+                <span class="operator">×</span>
+                <span class="number purple">100</span>
+            `;
+
+            visualBox.innerHTML = `
+                <div class="cards">
+
+                    <div class="value-card">
+                        <span class="blue">${A}</span>
+                    </div>
+
+                    <div class="arrow">× ${data.hundreds} ➡️</div>
+
+                    <div class="value-card">
+                        <span class="green-text">${data.simple}</span>
+                    </div>
+
+                    <div class="arrow">× 100 ➡️</div>
+
+                    <div class="value-card">
+                        <span class="purple">${data.result}</span>
+                    </div>
+
+                </div>
+
+                <div class="base-ten">
+                    <div class="hundred"></div>
+                    <div class="hundred"></div>
+                </div>
+            `;
+
+            explanation.innerHTML = `
+                ✨ Multiplicamos primero:
+                <strong>${A} × ${data.hundreds} = ${data.simple}</strong>.
+                <br><br>
+                Después multiplicamos por <strong>100</strong>.
+                Esto equivale a agregar <strong>dos ceros</strong> al número:
+                <strong>${data.simple} → ${data.result}</strong>.
+            `;
+
+        }
+
+        else {
+
+            stepTitle.textContent =
+                "🎉 Paso 5: ¡Tenemos el resultado!";
+
+            stepDescription.textContent =
+                "La multiplicación original y la expresión descompuesta tienen el mismo resultado.";
+
+            equation.innerHTML = `
+                <span class="number blue">${A}</span>
+                <span class="operator">×</span>
+                <span class="number orange-text">${B}</span>
+                <span class="operator">=</span>
+                <span class="number green-text">${data.result}</span>
+            `;
+
+            visualBox.innerHTML = `
+                <div style="font-size:1.15rem; color:#597087;">
+                    Hemos recorrido este camino:
+                </div>
+
+                <div class="cards" style="margin-top:20px;">
+
+                    <div class="value-card">
+                        ${A} × ${B}
+                    </div>
+
+                    <div class="arrow">➡️</div>
+
+                    <div class="value-card">
+                        ${A} × ${data.hundreds} × 100
+                    </div>
+
+                    <div class="arrow">➡️</div>
+
+                    <div class="value-card">
+                        ${data.simple} × 100
+                    </div>
+
+                    <div class="arrow">➡️</div>
+
+                    <div class="value-card">
+                        <span class="green-text">${data.result}</span>
+                    </div>
+
+                </div>
+            `;
+
+            explanation.innerHTML = `
+                🏆 <strong>¡Excelente!</strong>
+                <br><br>
+                ${A} × ${B}
+                =
+                (${A} × ${data.hundreds}) × 100
+                =
+                ${data.simple} × 100
+                =
+                <strong>${data.result}</strong>
+            `;
+
+        }
+
+        prevBtn.disabled = step === 1;
+        nextBtn.disabled = step === totalSteps;
+
+        prevBtn.style.opacity = step === 1 ? ".45" : "1";
+        nextBtn.style.opacity = step === totalSteps ? ".45" : "1";
+    }
+
+
+    function animateCurrentStep() {
+
+        const elements = document.querySelectorAll(
+            "#equation .number, #visualBox .value-card, #visualBox .property"
+        );
+
+        elements.forEach((element, index) => {
+
+            element.classList.remove("highlight");
+
+            setTimeout(() => {
+                element.classList.add("highlight");
+            }, index * 180);
+
+        });
+
+    }
+
+
+    nextBtn.addEventListener("click", () => {
+
+        if (step < totalSteps) {
+            step++;
+            update();
+            animateCurrentStep();
+        }
+
+    });
+
+
+    prevBtn.addEventListener("click", () => {
+
+        if (step > 1) {
+            step--;
+            update();
+            animateCurrentStep();
+        }
+
+    });
+
+
+    animateBtn.addEventListener("click", () => {
+        animateCurrentStep();
+    });
+
+
+    startBtn.addEventListener("click", () => {
+        readInputs();
+        animateCurrentStep();
+    });
+
+
+    exampleBtn.addEventListener("click", () => {
+        setExample();
+        animateCurrentStep();
+    });
+
+
+    checkBtn.addEventListener("click", () => {
+
+        const data = getBData();
+        const userAnswer = Number(answer.value);
+
+        feedback.className = "feedback";
+
+        if (!Number.isFinite(userAnswer)) {
+            feedback.textContent =
+                "✏️ Escribe primero una respuesta.";
+            feedback.classList.add("incorrect");
+            return;
+        }
+
+        if (userAnswer === data.result) {
+
+            feedback.textContent =
+                `🎉 ¡Correcto! ${A} × ${B} = ${data.result}`;
+
+            feedback.classList.add("correct");
+
+            answer.value = "";
+
+        } else {
+
+            feedback.textContent =
+                "🤔 Todavía no. Recuerda descomponer el número que tiene los ceros.";
+
+            feedback.classList.add("incorrect");
+
+        }
+
+    });
+
+
+    answer.addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+            checkBtn.click();
+        }
+
+    });
+
+
+    factorAInput.addEventListener("change", readInputs);
+    factorBSelect.addEventListener("change", readInputs);
+
+
+    update();
+
+})();
+</script>
+
+</body>
+</html>

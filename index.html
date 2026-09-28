@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multiplicamos por cientos</title>
+<title>Multiplicamos por cientos - Algoritmo Vertical</title>
 
 <style>
     * {
@@ -89,10 +89,10 @@
         font-weight: bold;
         cursor: pointer;
         min-height: 46px;
-        transition: transform .15s, box-shadow .15s;
+        transition: transform .15s, box-shadow .15s, opacity .2s;
     }
 
-    button:hover {
+    button:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 6px 15px rgba(30,70,110,.18);
     }
@@ -105,11 +105,6 @@
     .secondary {
         background: #e7f1fb;
         color: #245784;
-    }
-
-    .orange {
-        background: #ffb64d;
-        color: #543400;
     }
 
     .green {
@@ -170,10 +165,10 @@
 
     .equation {
         margin: 25px auto;
-        font-size: clamp(2.3rem, 8vw, 5rem);
+        font-size: clamp(2rem, 6vw, 3.8rem);
         font-weight: 900;
         color: #193b63;
-        min-height: 100px;
+        min-height: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -186,40 +181,119 @@
         transition: all .5s ease;
     }
 
-    .blue {
-        color: #2784d8;
+    .blue { color: #2784d8; }
+    .orange-text { color: #ed951d; }
+    .green-text { color: #29a36a; }
+    .purple { color: #8b62c9; }
+    .operator { color: #66788c; }
+
+    .interactive-box {
+        margin: 20px auto;
+        padding: 22px;
+        background: #f8fbff;
+        border: 2px dashed #bcdcfa;
+        border-radius: 20px;
+        max-width: 650px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
     }
 
-    .orange-text {
+    .interactive-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        font-size: 1.3rem;
+        font-weight: bold;
+    }
+
+    .interactive-row input {
+        width: 100px;
+        text-align: center;
+        font-size: 1.2rem;
+        padding: 6px;
+    }
+
+    .step-feedback {
+        font-weight: bold;
+        font-size: 1rem;
+        min-height: 24px;
+    }
+
+    /* ESTILO PARA EL ALGORITMO VERTICAL */
+    .vertical-mult-box {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-end;
+        background: white;
+        padding: 20px 30px;
+        border-radius: 16px;
+        border: 2px solid #cbd9e8;
+        box-shadow: 0 4px 15px rgba(35,76,110,.08);
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 10px auto;
+    }
+
+    .carry-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 4px;
+        font-size: 1rem;
         color: #ed951d;
     }
 
-    .green-text {
-        color: #29a36a;
+    .carry-box {
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        font-size: 1.1rem;
+        border: 1.5px dashed #ffb64d;
+        border-radius: 6px;
+        padding: 0;
+        min-width: 0;
+        background: #fffdf5;
     }
 
-    .purple {
-        color: #8b62c9;
+    .vertical-line {
+        width: 100%;
+        height: 3px;
+        background: #183b67;
+        margin: 6px 0 10px;
     }
 
-    .operator {
-        color: #66788c;
+    .vertical-result-row {
+        display: flex;
+        gap: 6px;
+        align-items: center;
     }
 
-    .highlight {
-        animation: pop .65s ease;
+    .vert-input {
+        width: 40px;
+        height: 48px;
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+        border: 2px solid #3487d8;
+        border-radius: 8px;
+        padding: 0;
+        min-width: 0;
+        background: #fdfefe;
     }
 
-    @keyframes pop {
-        0% { transform: scale(.7); opacity: .2; }
-        60% { transform: scale(1.2); }
-        100% { transform: scale(1); opacity: 1; }
+    .vert-input:focus {
+        border-color: #5fc995;
+        background: #f3fff9;
     }
 
     .visual-box {
         margin: 25px auto;
         max-width: 850px;
-        min-height: 210px;
+        min-height: 140px;
         background: #f2f8fd;
         border-radius: 22px;
         padding: 22px;
@@ -253,88 +327,6 @@
         font-weight: normal;
     }
 
-    .arrow {
-        font-size: 2.5rem;
-        color: #5c92c3;
-        animation: arrowMove 1.2s infinite alternate;
-    }
-
-    @keyframes arrowMove {
-        from { transform: translateX(-4px); }
-        to { transform: translateX(4px); }
-    }
-
-    .base-ten {
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 18px;
-    }
-
-    .block {
-        width: 34px;
-        height: 34px;
-        background: #5bb8e8;
-        border: 2px solid #2589bb;
-        border-radius: 5px;
-        box-shadow: 2px 3px 0 #237ca8;
-        animation: blockIn .4s ease both;
-    }
-
-    @keyframes blockIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px) scale(.7);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-
-    .hundred {
-        width: 70px;
-        height: 70px;
-        background:
-            linear-gradient(90deg,
-            transparent 31%, rgba(255,255,255,.7) 32%, transparent 34%,
-            transparent 65%, rgba(255,255,255,.7) 66%, transparent 68%),
-            linear-gradient(
-            transparent 31%, rgba(255,255,255,.7) 32%, transparent 34%,
-            transparent 65%, rgba(255,255,255,.7) 66%, transparent 68%),
-            #62bde7;
-        border: 3px solid #2688b9;
-        border-radius: 8px;
-        box-shadow: 3px 4px 0 #267da5;
-    }
-
-    .zeros {
-        display: inline-flex;
-        gap: 4px;
-    }
-
-    .zero {
-        display: inline-block;
-        padding: 5px 9px;
-        background: #dceeff;
-        color: #2571ae;
-        border-radius: 9px;
-        animation: zeroIn .5s ease both;
-    }
-
-    @keyframes zeroIn {
-        from {
-            transform: scale(0);
-            opacity: 0;
-        }
-        to {
-            transform: scale(1);
-            opacity: 1;
-        }
-    }
-
     .explanation {
         max-width: 780px;
         margin: 20px auto;
@@ -345,16 +337,6 @@
         text-align: left;
         font-size: 1.05rem;
         line-height: 1.55;
-    }
-
-    .property {
-        display: inline-block;
-        padding: 7px 13px;
-        background: #eee7ff;
-        color: #694ba0;
-        border-radius: 20px;
-        font-weight: bold;
-        margin: 8px;
     }
 
     .controls {
@@ -396,13 +378,8 @@
         font-weight: bold;
     }
 
-    .correct {
-        color: #14804f;
-    }
-
-    .incorrect {
-        color: #c45c22;
-    }
+    .correct { color: #14804f; }
+    .incorrect { color: #c45c22; }
 
     .teacher-note {
         margin-top: 20px;
@@ -412,37 +389,7 @@
         color: #5c6c7e;
         text-align: left;
         font-size: .94rem;
-    }
-
-    @media (max-width: 600px) {
-        .app {
-            width: 96%;
-        }
-
-        .main-card {
-            padding: 18px 12px;
-        }
-
-        .equation {
-            gap: 7px;
-        }
-
-        .value-card {
-            min-width: 100px;
-            padding: 14px;
-        }
-
-        .arrow {
-            font-size: 1.8rem;
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        *, *::before, *::after {
-            animation-duration: .01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: .01ms !important;
-        }
+        line-height: 1.5;
     }
 </style>
 </head>
@@ -453,11 +400,10 @@
 
     <header>
         <h1>🚀 Multiplicamos por cientos</h1>
-        <p>Descubrimos una forma sencilla de resolver multiplicaciones como <strong>32 × 300</strong></p>
+        <p>Descomponemos centenas y resolvemos el producto de forma vertical</p>
     </header>
 
     <section class="top-panel">
-
         <div class="control">
             <label for="factorA">Primer factor</label>
             <input id="factorA" type="number" value="32" min="1" max="999">
@@ -478,14 +424,8 @@
             </select>
         </div>
 
-        <button class="primary" id="startBtn" type="button">
-            ▶ Comenzar
-        </button>
-
-        <button class="secondary" id="exampleBtn" type="button">
-            🔄 Otro ejemplo
-        </button>
-
+        <button class="primary" id="startBtn" type="button">▶ Comenzar</button>
+        <button class="secondary" id="exampleBtn" type="button">🔄 Otro ejemplo</button>
     </section>
 
     <section class="progress-area">
@@ -493,82 +433,50 @@
             <span id="progressText">Paso 1 de 5</span>
             <span id="progressPercent">20%</span>
         </div>
-
         <div class="progress">
             <div class="progress-bar" id="progressBar"></div>
         </div>
     </section>
 
     <main class="main-card">
-
-        <h2 class="step-title" id="stepTitle">
-            Paso 1: Observamos la multiplicación
-        </h2>
-
-        <p class="step-description" id="stepDescription">
-            Primero observamos los factores y pensamos cómo podemos transformar la multiplicación.
-        </p>
+        <h2 class="step-title" id="stepTitle">Paso 1: Observamos la multiplicación</h2>
+        <p class="step-description" id="stepDescription">Analizamos los factores antes de empezar.</p>
 
         <div class="equation" id="equation"></div>
-
         <div class="visual-box" id="visualBox"></div>
-
         <div class="explanation" id="explanation"></div>
 
+        <!-- ZONA INTERACTIVA -->
+        <div class="interactive-box" id="interactiveBox" style="display: none;">
+            <div id="interactivePrompt" style="font-weight: bold; color: #245784;"></div>
+            <div id="interactiveContainer"></div>
+            <button class="green" id="validateStepBtn" type="button">Comprobar este paso</button>
+            <div class="step-feedback" id="stepFeedback"></div>
+        </div>
+
         <div class="controls">
-            <button class="secondary" id="prevBtn" type="button">
-                ◀ Anterior
-            </button>
-
-            <button class="primary" id="nextBtn" type="button">
-                Siguiente ▶
-            </button>
-
-            <button class="green" id="animateBtn" type="button">
-                ✨ Animar paso
-            </button>
+            <button class="secondary" id="prevBtn" type="button">◀ Anterior</button>
+            <button class="primary" id="nextBtn" type="button">Siguiente ▶</button>
         </div>
 
         <section class="challenge">
-
-            <h3>🎯 Ahora inténtalo tú</h3>
-
-            <div id="challengeQuestion">
-                ¿Cuánto es 32 × 300?
-            </div>
-
+            <h3>🎯 Reto final</h3>
+            <div id="challengeQuestion">¿Cuánto es 32 × 300?</div>
             <div class="answer-area">
-                <input
-                    id="answer"
-                    type="number"
-                    placeholder="Escribe tu respuesta"
-                    aria-label="Respuesta"
-                >
-
-                <button class="green" id="checkBtn" type="button">
-                    Comprobar
-                </button>
+                <input id="answer" type="number" placeholder="Escribe tu respuesta" aria-label="Respuesta">
+                <button class="green" id="checkBtn" type="button">Comprobar</button>
             </div>
-
             <div class="feedback" id="feedback" aria-live="polite"></div>
-
         </section>
 
-        <div class="teacher-note">
-            💡 <strong>Idea para modelar:</strong>
-            primero se puede preguntar:
-            <em>“¿Qué podemos hacer con el 300 para que la multiplicación sea más fácil?”</em>
-            Después se muestra que <strong>300 = 3 × 100</strong> y se observa cómo
-            <strong>32 × 3 = 96</strong> y luego se incorpora el ×100.
+        <div class="teacher-note" id="teacherNote">
+            💡 <strong>Estrategia de cálculo:</strong> Descomponemos el número terminado en ceros (300 = 3 × 100), resolvemos verticalmente el producto básico (32 × 3 = 96) y luego agregamos los ceros correspondientes al multiplicar por 100 (96 × 100 = 9600).
         </div>
-
     </main>
 </div>
 
-
 <script>
 (() => {
-
     const factorAInput = document.getElementById("factorA");
     const factorBSelect = document.getElementById("factorB");
 
@@ -576,12 +484,10 @@
     const exampleBtn = document.getElementById("exampleBtn");
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
-    const animateBtn = document.getElementById("animateBtn");
 
     const equation = document.getElementById("equation");
     const visualBox = document.getElementById("visualBox");
     const explanation = document.getElementById("explanation");
-
     const stepTitle = document.getElementById("stepTitle");
     const stepDescription = document.getElementById("stepDescription");
 
@@ -589,30 +495,32 @@
     const progressPercent = document.getElementById("progressPercent");
     const progressBar = document.getElementById("progressBar");
 
+    const interactiveBox = document.getElementById("interactiveBox");
+    const interactivePrompt = document.getElementById("interactivePrompt");
+    const interactiveContainer = document.getElementById("interactiveContainer");
+    const validateStepBtn = document.getElementById("validateStepBtn");
+    const stepFeedback = document.getElementById("stepFeedback");
+
     const challengeQuestion = document.getElementById("challengeQuestion");
     const answer = document.getElementById("answer");
     const checkBtn = document.getElementById("checkBtn");
     const feedback = document.getElementById("feedback");
+    const teacherNote = document.getElementById("teacherNote");
 
     let A = 32;
     let B = 300;
     let step = 1;
-
     const totalSteps = 5;
 
+    let stepCompleted = [true, false, true, false, true]; 
 
     function cleanNumber(value) {
         const n = Number(value);
-
-        if (!Number.isFinite(n)) return 1;
-
-        return Math.max(1, Math.min(999, Math.round(n)));
+        return !Number.isFinite(n) ? 1 : Math.max(1, Math.min(999, Math.round(n)));
     }
-
 
     function getBData() {
         const hundreds = B / 100;
-
         return {
             hundreds,
             result: A * B,
@@ -620,451 +528,259 @@
         };
     }
 
-
     function setExample() {
-
-        const examples = [
-            [32, 300],
-            [40, 200],
-            [24, 400],
-            [15, 300],
-            [25, 200],
-            [36, 500],
-            [42, 200]
-        ];
-
-        const current = `${A}-${B}`;
-
+        const examples = [[32, 300], [45, 200], [24, 400], [16, 300], [25, 200], [36, 500]];
         let choice = examples[Math.floor(Math.random() * examples.length)];
-
-        while (`${choice[0]}-${choice[1]}` === current) {
-            choice = examples[Math.floor(Math.random() * examples.length)];
-        }
-
         A = choice[0];
         B = choice[1];
-
         factorAInput.value = A;
         factorBSelect.value = B;
-
         step = 1;
-
+        stepCompleted = [true, false, true, false, true];
         update();
     }
-
 
     function readInputs() {
-
         A = cleanNumber(factorAInput.value);
         B = Number(factorBSelect.value);
-
-        if (![100,200,300,400,500,600,700,800,900].includes(B)) {
-            B = 100;
-            factorBSelect.value = 100;
-        }
-
         factorAInput.value = A;
-
         step = 1;
-
+        stepCompleted = [true, false, true, false, true];
         feedback.textContent = "";
-
         update();
     }
 
-
     function updateProgress() {
-
         const percent = Math.round((step / totalSteps) * 100);
-
-        progressText.textContent =
-            `Paso ${step} de ${totalSteps}`;
-
-        progressPercent.textContent =
-            `${percent}%`;
-
+        progressText.textContent = `Paso ${step} de ${totalSteps}`;
+        progressPercent.textContent = `${percent}%`;
         progressBar.style.width = `${percent}%`;
     }
 
-
     function update() {
-
         updateProgress();
-
         const data = getBData();
+        challengeQuestion.innerHTML = `¿Cuánto es <strong>${A} × ${B}</strong>?`;
 
-        challengeQuestion.innerHTML =
-            `¿Cuánto es <strong>${A} × ${B}</strong>?`;
+        // Actualización dinámica de la nota pedagógica sin sintaxis LaTeX
+        teacherNote.innerHTML = `💡 <strong>Estrategia de cálculo:</strong> Descomponemos el número terminado en ceros (${B} = ${data.hundreds} × 100), resolvemos verticalmente el producto básico (${A} × ${data.hundreds} = ${data.simple}) y luego agregamos los ceros correspondientes al multiplicar por 100 (${data.simple} × 100 = ${data.result}).`;
+
+        if (stepCompleted[step - 1]) {
+            nextBtn.disabled = false;
+            nextBtn.style.opacity = "1";
+        } else {
+            nextBtn.disabled = true;
+            nextBtn.style.opacity = "0.45";
+        }
+
+        prevBtn.disabled = (step === 1);
+        prevBtn.style.opacity = (step === 1 ? ".45" : "1");
+
+        interactiveBox.style.display = "none";
+        stepFeedback.textContent = "";
 
         if (step === 1) {
-
-            stepTitle.textContent =
-                "Paso 1: Observamos la multiplicación";
-
-            stepDescription.textContent =
-                "Tenemos una multiplicación con un número que termina en dos ceros.";
-
-            equation.innerHTML = `
-                <span class="number blue">${A}</span>
-                <span class="operator">×</span>
-                <span class="number orange-text">${B}</span>
-            `;
-
+            stepTitle.textContent = "Paso 1: Observamos la multiplicación";
+            stepDescription.textContent = "Analizamos los factores antes de empezar.";
+            equation.innerHTML = `<span class="number blue">${A}</span><span class="operator">×</span><span class="number orange-text">${B}</span>`;
             visualBox.innerHTML = `
                 <div class="cards">
-                    <div class="value-card">
-                        <span class="blue">${A}</span>
-                        <small>primer factor</small>
-                    </div>
-
+                    <div class="value-card"><span class="blue">${A}</span><small>primer factor</small></div>
                     <div class="operator">×</div>
+                    <div class="value-card"><span class="orange-text">${B}</span><small>segundo factor (centena)</small></div>
+                </div>`;
+            explanation.innerHTML = `🔎 Observa el segundo factor: <strong>${B}</strong> termina en dos ceros. En el siguiente paso lo descompondremos en centenas.`;
 
-                    <div class="value-card">
-                        <span class="orange-text">${B}</span>
-                        <small>segundo factor</small>
-                    </div>
+        } else if (step === 2) {
+            stepTitle.textContent = "Paso 2: Descomponemos el número";
+            stepDescription.textContent = `Transforma ${B} en su dígito base multiplicado por 100.`;
+            
+            equation.innerHTML = `<span class="number blue">${A}</span><span class="operator">×</span><span class="number orange-text">${B}</span> <span class="operator">=</span> <span class="blue">${A}</span> <span class="operator">×</span> <span class="orange-text">?</span> <span class="operator">×</span> <span class="purple">100</span>`;
+            visualBox.innerHTML = `<div class="cards"><div class="value-card"><span class="orange-text">${B}</span><small>Número a descomponer</small></div></div>`;
+            explanation.innerHTML = `💡 Escribe la cantidad de centenas que forman <strong>${B}</strong>. Por ejemplo, ${B} son ${data.hundreds} grupos de 100.`;
+
+            interactiveBox.style.display = "flex";
+            interactivePrompt.textContent = `Escribe la descomposición de ${B}:`;
+            interactiveContainer.innerHTML = `
+                <div class="interactive-row">
+                    <span>${B} =</span>
+                    <input type="number" id="inputDigit" placeholder="Dígito" style="width: 85px;">
+                    <span>× 100</span>
                 </div>
             `;
 
-            explanation.innerHTML = `
-                🔎 Observemos el segundo factor:
-                <strong>${B}</strong> tiene dos ceros.
-                Podemos descomponerlo para hacer la multiplicación más sencilla.
-            `;
-
-        }
-
-        else if (step === 2) {
-
-            stepTitle.textContent =
-                "Paso 2: Descomponemos el número";
-
-            stepDescription.textContent =
-                `Transformamos ${B} en ${data.hundreds} × 100.`;
-
-            equation.innerHTML = `
-                <span class="number blue">${A}</span>
-                <span class="operator">×</span>
-                <span class="number orange-text">${B}</span>
-                <span class="operator">=</span>
-                <span class="number orange-text">${data.hundreds}</span>
-                <span class="operator">×</span>
-                <span class="number purple">100</span>
-            `;
-
+        } else if (step === 3) {
+            stepTitle.textContent = "Paso 3: Aplicamos la propiedad asociativa";
+            stepDescription.textContent = "Agrupamos primero los factores para resolver la multiplicación principal.";
+            
+            equation.innerHTML = `(<span class="number blue">${A}</span><span class="operator">×</span><span class="number orange-text">${data.hundreds}</span>)<span class="operator">×</span><span class="number purple">100</span>`;
             visualBox.innerHTML = `
                 <div class="cards">
+                    <div class="value-card"><span class="blue">${A}</span></div>
+                    <div class="operator">×</div>
+                    <div class="value-card"><span class="orange-text">${data.hundreds}</span></div>
+                    <div class="operator">=</div>
+                    <div class="value-card"><span class="green-text">?</span></div>
+                </div>`;
+            explanation.innerHTML = `🧠 Al asociar, primero resolveremos la multiplicación: <strong>${A} × ${data.hundreds}</strong>.<br>Haz clic en <strong>Siguiente ▶</strong> para resolverla de forma vertical en el siguiente paso.`;
 
-                    <div class="value-card">
-                        <span class="orange-text">${B}</span>
+        } else if (step === 4) {
+            stepTitle.textContent = "Paso 4: Multiplica en forma vertical y agrega los ceros";
+            stepDescription.textContent = `Resuelve ${A} × ${data.hundreds} verticalmente y luego añade los dos ceros del 100.`;
+
+            equation.innerHTML = `<span class="number blue">${A}</span><span class="operator">×</span><span class="number orange-text">${data.hundreds}</span> <span class="operator">=</span> <span class="number green-text">${data.simple}</span>`;
+            visualBox.innerHTML = `
+                <div style="font-size:1.1rem; color:#40566f; margin-bottom:10px;">
+                    Resuelve en el recuadro inferior la multiplicación en columna:
+                </div>`;
+            explanation.innerHTML = `✏️ Multiplica <strong>${data.hundreds}</strong> por cada cifra de <strong>${A}</strong> (de derecha a izquierda). Si llevas alguna cantidad, anótala en los cuadros punteados de arriba.<br>Al final, agrega los dos ceros del 100 para obtener el producto total.`;
+
+            const aStr = A.toString();
+            const expectedSimple = data.simple.toString();
+            const numDigits = expectedSimple.length;
+
+            let carryInputsHTML = '<div class="carry-row">';
+            for(let i = 0; i < aStr.length; i++) {
+                carryInputsHTML += `<input type="number" class="carry-box" id="carry_${i}" placeholder=" " title="Llevada">`;
+            }
+            carryInputsHTML += '</div>';
+
+            let resultInputsHTML = '<div class="vertical-result-row">';
+            for(let i = 0; i < numDigits; i++) {
+                resultInputsHTML += `<input type="number" class="vert-input" id="vert_res_${i}" placeholder="?">`;
+            }
+            resultInputsHTML += '</div>';
+
+            interactiveBox.style.display = "flex";
+            interactivePrompt.textContent = `1. Resuelve la multiplicación vertical y 2. Agrega los ceros al final:`;
+            interactiveContainer.innerHTML = `
+                <div class="vertical-mult-box">
+                    ${carryInputsHTML}
+                    <div style="letter-spacing: 6px; color:#2784d8;">${A}</div>
+                    <div style="display:flex; justify-content:space-between; width:100%;">
+                        <span style="color:#66788c;">×</span>
+                        <span style="color:#ed951d;">${data.hundreds}</span>
                     </div>
+                    <div class="vertical-line"></div>
+                    ${resultInputsHTML}
+                </div>
 
+                <div class="interactive-row" style="margin-top: 15px;">
+                    <span>Ahora agrega los dos ceros (× 100):</span>
+                    <input type="number" id="inputFinalWithZeros" placeholder="Resultado final" style="width: 150px;">
+                </div>
+            `;
+
+        } else {
+            stepTitle.textContent = "🎉 Paso 5: ¡Resultado obtenido!";
+            stepDescription.textContent = "Comprobamos que todo el proceso es equivalente.";
+            
+            equation.innerHTML = `<span class="number blue">${A}</span><span class="operator">×</span><span class="number orange-text">${B}</span><span class="operator">=</span><span class="number green-text">${data.result}</span>`;
+            visualBox.innerHTML = `
+                <div class="cards">
+                    <div class="value-card">${A} × ${B}</div>
                     <div class="arrow">➡️</div>
-
-                    <div class="value-card">
-                        <span class="orange-text">${data.hundreds}</span>
-                        <small>grupos de 100</small>
-                    </div>
-
-                    <div class="operator">×</div>
-
-                    <div class="value-card">
-                        <span class="purple">100</span>
-                    </div>
-
-                </div>
-            `;
-
-            explanation.innerHTML = `
-                🧩 <strong>${B} = ${data.hundreds} × 100</strong>.
-                Ahora podemos sustituir ${B} por esa descomposición:
-                <br><br>
-                <strong>${A} × ${B}</strong>
-                =
-                <strong>${A} × ${data.hundreds} × 100</strong>
-            `;
-
+                    <div class="value-card">${A} × ${data.hundreds} = ${data.simple}</div>
+                    <div class="arrow">➡️</div>
+                    <div class="value-card"><span class="green-text">${data.result}</span><small>Con los ceros añadidos</small></div>
+                </div>`;
+            explanation.innerHTML = `🏆 ¡Excelente trabajo! Al multiplicar <strong>${A} × ${data.hundreds}</strong> obtuviste <strong>${data.simple}</strong> en forma vertical. Al agregarle los dos ceros del 100 llegaste al resultado exacto: <strong>${data.result}</strong>.`;
         }
+    }
 
-        else if (step === 3) {
+    validateStepBtn.addEventListener("click", () => {
+        const data = getBData();
 
-            stepTitle.textContent =
-                "Paso 3: Aplicamos la propiedad asociativa";
-
-            stepDescription.textContent =
-                "Agrupamos primero los números que hacen más fácil la multiplicación.";
-
-            equation.innerHTML = `
-                <span class="number blue">${A}</span>
-                <span class="operator">×</span>
-                <span class="number orange-text">${data.hundreds}</span>
-                <span class="operator">×</span>
-                <span class="number purple">100</span>
-            `;
-
-            visualBox.innerHTML = `
-                <div class="property">
-                    Propiedad asociativa
-                </div>
-
-                <div style="font-size:clamp(1.7rem,5vw,3rem); margin-top:20px;">
-                    (<strong class="blue">${A}</strong>
-                    ×
-                    <strong class="orange-text">${data.hundreds}</strong>)
-                    ×
-                    <strong class="purple">100</strong>
-                </div>
-
-                <div style="font-size:1.1rem; margin-top:18px; color:#65788d;">
-                    Primero multiplicamos los factores pequeños.
-                </div>
-            `;
-
-            explanation.innerHTML = `
-                🧠 La propiedad asociativa nos permite cambiar
-                <strong>la forma de agrupar</strong> los factores sin cambiar
-                el resultado.
-                <br><br>
-                Así podemos calcular primero:
-                <strong>${A} × ${data.hundreds}</strong>.
-            `;
-
-        }
-
+        if (step === 2) {
+            const inputDigit = document.getElementById("inputDigit");
+            const val = Number(inputDigit.value);
+            if (val === data.hundreds) {
+                stepFeedback.textContent = "🎉 ¡Excelente! Descompusiste correctamente la centena.";
+                stepFeedback.className = "step-feedback correct";
+                stepCompleted[1] = true;
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = "1";
+            } else {
+                stepFeedback.textContent = `❌ Revisa. ${B} equivale a ${data.hundreds} × 100.`;
+                stepFeedback.className = "step-feedback incorrect";
+            }
+        } 
         else if (step === 4) {
+            const expectedSimple = data.simple.toString();
+            let enteredSimple = "";
+            for(let i = 0; i < expectedSimple.length; i++) {
+                const box = document.getElementById(`vert_res_${i}`);
+                enteredSimple += (box && box.value !== "") ? box.value : " ";
+            }
 
-            stepTitle.textContent =
-                "Paso 4: Multiplicamos y agregamos los ceros";
+            const inputFinalWithZeros = document.getElementById("inputFinalWithZeros");
+            const enteredFinal = Number(inputFinalWithZeros.value);
 
-            stepDescription.textContent =
-                `${A} × ${data.hundreds} = ${data.simple}. Luego multiplicamos por 100.`;
+            if (enteredSimple.trim() !== expectedSimple) {
+                stepFeedback.textContent = `❌ Revisa la multiplicación vertical: ${A} × ${data.hundreds} es ${data.simple}.`;
+                stepFeedback.className = "step-feedback incorrect";
+                return;
+            }
 
-            equation.innerHTML = `
-                <span class="number blue">${A}</span>
-                <span class="operator">×</span>
-                <span class="number orange-text">${data.hundreds}</span>
-                <span class="operator">=</span>
-                <span class="number green-text">${data.simple}</span>
-                <span class="operator">×</span>
-                <span class="number purple">100</span>
-            `;
-
-            visualBox.innerHTML = `
-                <div class="cards">
-
-                    <div class="value-card">
-                        <span class="blue">${A}</span>
-                    </div>
-
-                    <div class="arrow">× ${data.hundreds} ➡️</div>
-
-                    <div class="value-card">
-                        <span class="green-text">${data.simple}</span>
-                    </div>
-
-                    <div class="arrow">× 100 ➡️</div>
-
-                    <div class="value-card">
-                        <span class="purple">${data.result}</span>
-                    </div>
-
-                </div>
-
-                <div class="base-ten">
-                    <div class="hundred"></div>
-                    <div class="hundred"></div>
-                </div>
-            `;
-
-            explanation.innerHTML = `
-                ✨ Multiplicamos primero:
-                <strong>${A} × ${data.hundreds} = ${data.simple}</strong>.
-                <br><br>
-                Después multiplicamos por <strong>100</strong>.
-                Esto equivale a agregar <strong>dos ceros</strong> al número:
-                <strong>${data.simple} → ${data.result}</strong>.
-            `;
-
+            if (enteredFinal === data.result) {
+                stepFeedback.textContent = "🎉 ¡Correcto! Resolviste la multiplicación vertical y agregaste los ceros con precisión.";
+                stepFeedback.className = "step-feedback correct";
+                stepCompleted[3] = true;
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = "1";
+            } else {
+                stepFeedback.textContent = `⚠️ El producto vertical es correcto (${data.simple}), pero revisa el resultado final al agregarle los dos ceros.`;
+                stepFeedback.className = "step-feedback incorrect";
+            }
         }
-
-        else {
-
-            stepTitle.textContent =
-                "🎉 Paso 5: ¡Tenemos el resultado!";
-
-            stepDescription.textContent =
-                "La multiplicación original y la expresión descompuesta tienen el mismo resultado.";
-
-            equation.innerHTML = `
-                <span class="number blue">${A}</span>
-                <span class="operator">×</span>
-                <span class="number orange-text">${B}</span>
-                <span class="operator">=</span>
-                <span class="number green-text">${data.result}</span>
-            `;
-
-            visualBox.innerHTML = `
-                <div style="font-size:1.15rem; color:#597087;">
-                    Hemos recorrido este camino:
-                </div>
-
-                <div class="cards" style="margin-top:20px;">
-
-                    <div class="value-card">
-                        ${A} × ${B}
-                    </div>
-
-                    <div class="arrow">➡️</div>
-
-                    <div class="value-card">
-                        ${A} × ${data.hundreds} × 100
-                    </div>
-
-                    <div class="arrow">➡️</div>
-
-                    <div class="value-card">
-                        ${data.simple} × 100
-                    </div>
-
-                    <div class="arrow">➡️</div>
-
-                    <div class="value-card">
-                        <span class="green-text">${data.result}</span>
-                    </div>
-
-                </div>
-            `;
-
-            explanation.innerHTML = `
-                🏆 <strong>¡Excelente!</strong>
-                <br><br>
-                ${A} × ${B}
-                =
-                (${A} × ${data.hundreds}) × 100
-                =
-                ${data.simple} × 100
-                =
-                <strong>${data.result}</strong>
-            `;
-
-        }
-
-        prevBtn.disabled = step === 1;
-        nextBtn.disabled = step === totalSteps;
-
-        prevBtn.style.opacity = step === 1 ? ".45" : "1";
-        nextBtn.style.opacity = step === totalSteps ? ".45" : "1";
-    }
-
-
-    function animateCurrentStep() {
-
-        const elements = document.querySelectorAll(
-            "#equation .number, #visualBox .value-card, #visualBox .property"
-        );
-
-        elements.forEach((element, index) => {
-
-            element.classList.remove("highlight");
-
-            setTimeout(() => {
-                element.classList.add("highlight");
-            }, index * 180);
-
-        });
-
-    }
-
-
-    nextBtn.addEventListener("click", () => {
-
-        if (step < totalSteps) {
-            step++;
-            update();
-            animateCurrentStep();
-        }
-
     });
 
+    nextBtn.addEventListener("click", () => {
+        if (step < totalSteps && stepCompleted[step - 1]) {
+            step++;
+            update();
+        }
+    });
 
     prevBtn.addEventListener("click", () => {
-
         if (step > 1) {
             step--;
             update();
-            animateCurrentStep();
         }
-
     });
 
-
-    animateBtn.addEventListener("click", () => {
-        animateCurrentStep();
-    });
-
-
-    startBtn.addEventListener("click", () => {
-        readInputs();
-        animateCurrentStep();
-    });
-
-
-    exampleBtn.addEventListener("click", () => {
-        setExample();
-        animateCurrentStep();
-    });
-
+    startBtn.addEventListener("click", readInputs);
+    exampleBtn.addEventListener("click", setExample);
 
     checkBtn.addEventListener("click", () => {
-
         const data = getBData();
         const userAnswer = Number(answer.value);
-
         feedback.className = "feedback";
 
         if (!Number.isFinite(userAnswer)) {
-            feedback.textContent =
-                "✏️ Escribe primero una respuesta.";
+            feedback.textContent = "✏️ Escribe primero una respuesta.";
             feedback.classList.add("incorrect");
             return;
         }
 
         if (userAnswer === data.result) {
-
-            feedback.textContent =
-                `🎉 ¡Correcto! ${A} × ${B} = ${data.result}`;
-
+            feedback.textContent = `🎉 ¡Correcto! ${A} × ${B} = ${data.result}`;
             feedback.classList.add("correct");
-
             answer.value = "";
-
         } else {
-
-            feedback.textContent =
-                "🤔 Todavía no. Recuerda descomponer el número que tiene los ceros.";
-
+            feedback.textContent = "🤔 Todavía no. Usa los pasos de descomposición y multiplicación vertical para guiarte.";
             feedback.classList.add("incorrect");
-
         }
-
     });
-
 
     answer.addEventListener("keydown", event => {
-
-        if (event.key === "Enter") {
-            checkBtn.click();
-        }
-
+        if (event.key === "Enter") checkBtn.click();
     });
-
 
     factorAInput.addEventListener("change", readInputs);
     factorBSelect.addEventListener("change", readInputs);
 
-
     update();
-
 })();
 </script>
 
